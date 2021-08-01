@@ -6,6 +6,7 @@ colorama==0.4.4
 DateTime==4.3
 distribution==1.0.0
 fastapi==0.68.0
+gunicorn==20.1.0
 h11==0.12.0
 idna==3.2
 pydantic==1.8.2
