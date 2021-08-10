@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Home page</title>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+	<link rel="stylesheet" href="{{ url_for("static", path="/styles.css") }}">
+	<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+</head>
+<body>
+	<p><h1 align="center">Welcome to the world's countries explorer app</h1></p>
+	<p align="center">
+		<tr>
+			<input type = "text" id="country-name" name = "country-name" placeholder="Searching country name...">
+			<button type = "button" id="search-button" name = "search-button">Search</button>
+			<button type = "button" onclick="window.location.href='{{url_for('get_list')}}';">View full list</button>
+		</tr>	
+	</p>
+	<script>
+		$( "#search-button" ).click(function() {
+			var url = $("#country-name").val();
+			$(location).attr('href','/countries/' + url);
+		});
+	</script>
+</body>
+</html>

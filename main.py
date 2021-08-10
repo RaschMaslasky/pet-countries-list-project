@@ -1,10 +1,17 @@
-from fastapi import FastAPI
 import requests
+from fastapi import FastAPI, Request
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
+from starlette.applications import Starlette
 
 app = FastAPI()
 
-# глобальная переменная
+# global variable
 db_countries = []
+
+templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 
 class RequestAPI:
   def get_list(self):
@@ -14,27 +21,28 @@ class RequestAPI:
     return db_countries
 
 # home page
-@app.get("/")
-def index():
-  return "Welcome! This is a home page"
+@app.route("/")
+def index(request: Request):
+  return templates.TemplateResponse("index.html", {"request": request})
 
 # get list about countries
 @app.get('/countries/list')
-def get_list():
-  request = RequestAPI() 
-  return request.get_list() 
+def get_list(request: Request):
+  req = RequestAPI() 
+  result = req.get_list()  
+  return templates.TemplateResponse("colist.html", {"request": request, "countrieslist": result})
 
 # get info about countries
-@app.get('/countries/{name}')
-def get_info(name):
+@app.get('/countries/{coname}')
+def get_info(request: Request, coname):
   if (len(db_countries) > 0):
-    search = next((item for item in db_countries if item["name"] == name), None)	
+    search = next((item for item in db_countries if item["name"] == coname), None)	
     if (search):
-      result = search
+      result = templates.TemplateResponse("country.html", {"request": request, "country": search})  
     else:
-      result = "Sorry. There are not any info about %s" %name
+      result = "Sorry, There are not any info about %s" %coname
   else:
-    result = "Sorry. Info about coutries reload. Please try again" 
+    result = "Sorry, countries info has updated. Please refresh current page." 
     request = RequestAPI()
     request.get_list()
 
