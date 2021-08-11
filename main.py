@@ -40,9 +40,9 @@ def get_info(request: Request, coname):
     if (search):
       result = templates.TemplateResponse("country.html", {"request": request, "country": search})  
     else:
-      result = "Sorry, There are not any info about %s" %coname
+      result = "Sorry, There is not any info about %s" %coname
   else:
-    result = "Sorry, countries info has updated. Please refresh current page." 
+    result = "Countries info has updated. Please refresh current page." 
     request = RequestAPI()
     request.get_list()
 
